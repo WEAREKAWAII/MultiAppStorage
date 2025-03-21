@@ -77,7 +77,7 @@ services:
       - spring-mysql-net
     volumes:
       - mysql_data:/var/lib/mysql
-      **- ~/mysql-backups:/backup**
+      - ~/mysql-backups:/backup
     healthcheck:
       test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u root --password=$${MYSQL_ROOT_PASSWORD} || exit 1']
       interval: 10s
