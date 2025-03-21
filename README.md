@@ -8,7 +8,7 @@
 |:-:|:-:|:-:|:-:|
 |김리영<br/>[@riyeong0916](https://github.com/riyeong0916) |나원호<br/>[@CooolRyanJ](https://github.com/CooolRyan)|박정호<br/>[@Jeongho427](https://github.com/Jeongho427)|이은정<br/>[@eundeom](https://github.com/eundeom) |
 
-![image (8)]()
+
 
 <br>
 
@@ -35,7 +35,7 @@ mkdir -p ~/mysql-backups
 
 <br>
 
-### 2️⃣ `docker-compose.yaml` 수정
+### 2️⃣ `docker-compose.yaml` 생성
 
 ```bash
 version: "3.8"
@@ -112,11 +112,11 @@ volumes:
 
 <br>
 
-### 3️⃣ DB 백업 스크립트 작성 (`backup.sh`)
+### 3️⃣ `backup.sh` DB 백업 스크립트 작성
 
 해당 파일은 **MySQL 컨테이너**에서 DB를 **`mysqldump`**를 이용해 **백업**하는 스크립트
 
-MySQL 컨테이너 내에서 `mysqldump` 명령어를 실행하고 결과를 호스트 OS의 `/backup` 디렉토리에 `.sql` 파일로 저장함.
+MySQL 컨테이너 내에서 `mysqldump` 명령어를 실행하고 결과를 호스트 OS의 `/backup` 디렉토리에 `.sql` 파일로 저장함
 
 ```bash
 #!/bin/bash
@@ -171,91 +171,13 @@ docker-compose logs -f
     ```
     
     **✅ 실행 결과**
-
+<div align=center>
   <img src="https://github.com/user-attachments/assets/85a3a7fb-4c19-484b-b6f7-2f7d929df36d" width=700/>
-
-    
-    ```bash
-    ubuntu@myserver01:~/mysql-backups$ cat fisa_2025-03-21_05-28-03.sql
-    -- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
-    --
-    -- Host: localhost    Database: fisa
-    -- ------------------------------------------------------
-    -- Server version       8.0.41
-    
-    /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-    /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-    /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-    /*!50503 SET NAMES utf8mb4 */;
-    /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-    /*!40103 SET TIME_ZONE='+00:00' */;
-    /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-    /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-    /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-    /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-    
-    --
-    -- Table structure for table `people`
-    --
-    
-    DROP TABLE IF EXISTS `people`;
-    /*!40101 SET @saved_cs_client     = @@character_set_client */;
-    /*!50503 SET character_set_client = utf8mb4 */;
-    CREATE TABLE `people` (
-      `age` int NOT NULL,
-      `no` bigint NOT NULL,
-      `people_name` varchar(255) DEFAULT NULL,
-      PRIMARY KEY (`no`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-    /*!40101 SET character_set_client = @saved_cs_client */;
-    
-    --
-    -- Dumping data for table `people`
-    --
-    
-    LOCK TABLES `people` WRITE;
-    /*!40000 ALTER TABLE `people` DISABLE KEYS */;
-    /*!40000 ALTER TABLE `people` ENABLE KEYS */;
-    UNLOCK TABLES;
-    
-    --
-    -- Table structure for table `people_seq`
-    --
-    
-    DROP TABLE IF EXISTS `people_seq`;
-    /*!40101 SET @saved_cs_client     = @@character_set_client */;
-    /*!50503 SET character_set_client = utf8mb4 */;
-    CREATE TABLE `people_seq` (
-      `next_val` bigint DEFAULT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-    /*!40101 SET character_set_client = @saved_cs_client */;
-    
-    --
-    -- Dumping data for table `people_seq`
-    --
-    
-    LOCK TABLES `people_seq` WRITE;
-    /*!40000 ALTER TABLE `people_seq` DISABLE KEYS */;
-    INSERT INTO `people_seq` VALUES (1);
-    /*!40000 ALTER TABLE `people_seq` ENABLE KEYS */;
-    UNLOCK TABLES;
-    /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-    
-    /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-    /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-    /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-    /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-    /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-    /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-    /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-    
-    -- Dump completed on 2025-03-21  5:28:03
-    ```
-    
+</div>
 
 <br>
 
-### 5️⃣ 주기적인 백업 자동화 (cron)
+### 5️⃣ `cron`으로 백업 자동화 
 
 1. crontab에 등록
     
@@ -272,7 +194,7 @@ docker-compose logs -f
 <img src="https://github.com/user-attachments/assets/65de6ae5-ce9c-4338-bc66-08fc6f85fe57" width=700/>
 
     
-    ( 매일 자정에 자동 백업 + backup.log에 로그 기록 예시 )
+( 매일 자정에 자동 백업 + backup.log에 로그 기록 예시 )
     
 
 <br>
@@ -285,7 +207,7 @@ docker-compose logs -f
 cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql -uroot -proot
 ```
 
-- .sql 파일이 MySQL 컨테이너 내부 mysql 명령으로 전달되어, 원래대로 DB가 복원.
+- `.sql` 파일이 MySQL 컨테이너 내부 mysql 명령으로 전달되어, 원래대로 DB가 복원
 
 <br>
 
@@ -293,7 +215,8 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 
 <img src="https://github.com/user-attachments/assets/e68f1cbc-b4e6-4268-8696-c1c2421cf87d" width=700/>
 
+<br>
 
-위 스크립트들을 사용하여, 매일  19, 20, 21일 자정에 각 백업이 .sql 파일 형식으로 생성된 것을 확인 가능.
+위 스크립트들을 사용하여, 매일  19, 20, 21일 자정에 각 백업이 .sql 파일 형식으로 생성된 것을 확인 가능
 
 해당 파일들은 MySQL 컨테이너 내 /backup/ 디렉토리에 저장되었고 주기적인 데이터베이스 백업 자동화가 된 것을 확인할 수 있다.
