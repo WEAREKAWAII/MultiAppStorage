@@ -242,3 +242,152 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 위 스크립트들을 사용하여, 매일  19, 20, 21일 자정에 각 백업이 .sql 파일 형식으로 생성된 것을 확인 가능
 
 해당 파일들은 MySQL 컨테이너 내 /backup/ 디렉토리에 저장되었고 주기적인 데이터베이스 백업 자동화가 된 것을 확인할 수 있다.
+
+### Docker volume 목록 확인
+
+![image](https://github.com/user-attachments/assets/25b7c0d3-962b-4d02-88a5-0ba37bcf7571)
+
+
+### Docker volume 정보 상세보기
+
+```bash
+docker volume inspect [volume_name]
+```
+
+![image](https://github.com/user-attachments/assets/e41dd800-0d78-4355-98ab-2452d000416a)
+
+
+- /var/lib/docker/volumes/08practice_myql_data/_data에 볼륨 마운트 있는 디렉터리 확인
+
+![image](https://github.com/user-attachments/assets/a71b7ea8-e291-4c92-8a84-b27af69165db)
+
+
+## 📌 파일별 의미
+
+| 파일/폴더 | 설명 |
+| --- | --- |
+| `auto.cnf` | MySQL 서버의 UUID를 저장하는 파일 (클러스터링 등에서 사용됨) |
+| `binlog.000001`, `binlog.000002`, `binlog.index` | **Binary Log (binlog)**: 트랜잭션 및 변경 사항 기록 |
+| `fisa/` | 네가 만든 **`fisa` 데이터베이스**의 실제 데이터 파일이 저장되는 폴더 |
+| `mysql/` | MySQL 시스템 데이터베이스 (사용자 계정, 권한 정보 포함) |
+| `sys/`, `performance_schema/` | MySQL 내부 시스템 테이블 |
+| `ibdata1` | **InnoDB 시스템 테이블스페이스** (트랜잭션 데이터, 테이블 메타데이터 저장) |
+| `ib_buffer_pool` | InnoDB 버퍼 풀 정보 (빠른 데이터 로드를 위해 사용) |
+| `ibtmp1` | 임시 테이블 저장 공간 |
+| `undo_001`, `undo_002` | **Undo 로그 파일** (트랜잭션 롤백에 사용) |
+| `server-cert.pem`, `server-key.pem`, `ca.pem`, `ca-key.pem`, `client-cert.pem`, `client-key.pem`, `public_key.pem`, `private_key.pem` | MySQL 보안 인증서 및 키 파일 |
+
+## 🔹 **가장 중요한 폴더**
+
+### 1. `fisa/`
+
+- `fisa`라는 폴더 안에 실제 테이블 데이터 파일(`.ibd`)이 들어 있음.
+
+```bash
+ls /var/lib/docker/volumes/08practice_mysql_data/_data/fisa/
+```
+
+### 2. `binlog.*`
+
+- Binary Log (이진 로그) 파일
+- MySQL의 **모든 데이터 변경 사항을 기록**하는 로그
+- DB 복원할 때 유용함
+
+### 3. `ibdata1`
+
+- InnoDB 테이블스페이스 파일
+- 모든 트랜잭션과 메타데이터를 저장하는 중요한 파일
+
+## ✅ **이 정보를 통해 알 수 있는 것**
+
+1. **MySQL 볼륨(`mysql_data`)이 정상적으로 마운트됨**
+    
+    → `fisa/` 폴더가 존재하는 걸 보면, DB가 정상적으로 저장되고 있음.
+    
+2. **MySQL 데이터가 컨테이너 재시작 후에도 유지됨**
+    
+    → 볼륨을 사용하고 있기 때문에 컨테이너를 삭제하고 다시 실행해도 데이터가 남아 있음.
+    
+3. **백업할 때 중요한 파일**
+    - `fisa/` → 개별 데이터 테이블
+    - `binlog.*` → 변경 로그
+    - `ibdata1`, `ibtmp1`, `undo_*` → 트랜잭션 정보
+
+### Docker network 확인
+
+![image](https://github.com/user-attachments/assets/91486e08-716c-4101-b7e6-abb00bd64dee)
+
+
+- 명령어를 통해 08practice_spring-mysql-net network 상에 존재하는 컨테이너 목록 확인
+- springbootapp1, springbootapp2, mysqldb 확인 가능
+
+```bash
+ubuntu@myserver1:~/08.practice$ docker network inspect 75853b5d03f9
+[
+    {
+        "Name": "08practice_spring-mysql-net",
+        "Id": "75853b5d03f9d91fca711f88602f814dc6051d26404e3752a34e7550b9b07f1a",
+        "Created": "2025-03-21T12:31:53.549942424+09:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "532a20296f34dee552ec720732fb16eaffe3b21470c1bdf9187e317b0e30b9d8": {
+                "Name": "springbootapp1",
+                "EndpointID": "b3399b07bcdb6cd9584beec389967c105cb272513469b4dc6a51fa66ffa083bf",
+                "MacAddress": "7e:64:28:be:34:9f",
+                "IPv4Address": "172.19.0.4/16",
+                "IPv6Address": ""
+            },
+            "efbcb07a374fa6d1b9ab28f08dd0db0397b90444d5188f0121b9867c79cea5d4": {
+                "Name": "springbootapp2",
+                "EndpointID": "c35870e21dc417f2ca2de7fade001a29e0418af4d42075b8476f31ecbcd6a5a6",
+                "MacAddress": "6a:ea:9b:61:24:0b",
+                "IPv4Address": "172.19.0.3/16",
+                "IPv6Address": ""
+            },
+            "f2b3ad1d40838d6bae27ae5123f09b3d20303e08ff79ed4ac1dd6691676c85ad": {
+                "Name": "mysqldb",
+                "EndpointID": "42e73e54db3718a7bfd9dbd275e5c596de7dd3bb4e384443245d197e2f81cfe3",
+                "MacAddress": "de:9c:e4:ee:07:73",
+                "IPv4Address": "172.19.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "spring-mysql-net",
+            "com.docker.compose.project": "08practice",
+            "com.docker.compose.version": "2.29.6"
+        }
+    }
+]
+
+```
+
+### 포트 확인 후 curl로 접속 확인
+
+![image](https://github.com/user-attachments/assets/606d27ad-cbf8-4f96-825d-14135d3faf9b)
+
+![image](https://github.com/user-attachments/assets/7bfd56c3-969c-431f-96b8-61f3f2ad0854)
+
+![image](https://github.com/user-attachments/assets/dc7f8125-ee18-47df-a05a-564e06f7b1e4)
+
