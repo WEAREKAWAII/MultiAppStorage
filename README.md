@@ -47,17 +47,9 @@
 
 <br>
 
-## ⚙️ 실행 절차 
+## ⚙️ 환경 설정
 
-### 1️⃣ 백업 파일을 저장할 **호스트 디렉토리** 생성
-
-```bash
-mkdir -p ~/mysql-backups
-```
-
-<br>
-
-### 2️⃣ `Dockerfile` 생성
+### 1️⃣ `Dockerfile` 생성
 ```
 # Base Image 설정
 FROM openjdk:17-slim
@@ -159,29 +151,7 @@ volumes:
   ```
 
 <br>
-
-### 3️⃣ `backup.sh` DB 백업 스크립트 작성
-
-해당 파일은 **MySQL 컨테이너**에서 DB를 **`mysqldump`**를 이용해 **백업**하는 스크립트
-
-MySQL 컨테이너 내에서 `mysqldump` 명령어를 실행하고 결과를 호스트 OS의 `/backup` 디렉토리에 `.sql` 파일로 저장함
-
-```bash
-#!/bin/bash
-
-docker exec mysqldb sh -c \
-  'mysqldump -uroot -proot fisa > /backup/fisa_$(date +%F_%H-%M-%S).sql'
-
-echo "[✔] Backup completed! Check ~/mysql-backups/"
-```
-
-- `docker exec mysqldb sh -c \
-  'mysqldump -uroot -proot fisa > /backup/fisa_$(date +%F_%H-%M-%S).sql'`
-: MySQL 데이터베이스 fisa의 **백업을 생성**하는 명령어를 실행함
-
-<br>
-
-### 4️⃣ `run.sh` 스크립트 작성
+### 3️⃣ `run.sh` 스크립트 작성
 
 **Docker Compose**를 이용하여 **애플리케이션 빌드하고 실행**하는 `run.sh` 스크립트 작성
 
@@ -204,28 +174,35 @@ docker-compose logs -f
 
 <br>
 
-### ✳ 중간 실행 확인
+### 4️⃣ 백업 파일을 저장할 **호스트 디렉토리** 생성
 
-1. Docker Compose로 MySQL 컨테이너 실행하기
-    
-    ```bash
-    docker-compose up
-    ```
-    
-2. DB 백업 스크립트 실행
-    
-    ```bash
-    ./backup.sh
-    ```
-    
-    **✅ 실행 결과**
-<div align=center>
-  <img src="https://github.com/user-attachments/assets/85a3a7fb-4c19-484b-b6f7-2f7d929df36d" width=700/>
-</div>
+```bash
+mkdir -p ~/mysql-backups
+```
+
+### 5️⃣ `backup.sh` DB 백업 스크립트 작성
+
+해당 파일은 **MySQL 컨테이너**에서 DB를 **`mysqldump`**를 이용해 **백업**하는 스크립트
+
+MySQL 컨테이너 내에서 `mysqldump` 명령어를 실행하고 결과를 호스트 OS의 `/backup` 디렉토리에 `.sql` 파일로 저장함
+
+```bash
+#!/bin/bash
+
+docker exec mysqldb sh -c \
+  'mysqldump -uroot -proot fisa > /backup/fisa_$(date +%F_%H-%M-%S).sql'
+
+echo "[✔] Backup completed! Check ~/mysql-backups/"
+```
+
+- `docker exec mysqldb sh -c \
+  'mysqldump -uroot -proot fisa > /backup/fisa_$(date +%F_%H-%M-%S).sql'`
+: MySQL 데이터베이스 fisa의 **백업을 생성**하는 명령어를 실행함
 
 <br>
 
-### 5️⃣ `cron`으로 백업 자동화 
+
+### 6️⃣ `cron`으로 백업 자동화 
 
 1. crontab에 등록
     
@@ -246,6 +223,11 @@ docker-compose logs -f
     
 
 <br>
+
+
+
+
+
 
 
 ## 💾 sql 백업
