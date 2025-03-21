@@ -235,6 +235,33 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 
 <br>
 
+## 실행 확인
+
+### run.sh 파일 실행
+
+- run.sh 파일을 실행하여 docker-compose, Dockerfile 실행
+
+![image](https://github.com/user-attachments/assets/210a0ca1-f02c-4f68-81f6-a4f350c50fea)
+
+### 컨테이너 생성 및 확인
+
+![image](https://github.com/user-attachments/assets/5d6b29a9-9dcf-4f19-a8f2-e2354f2399a9)
+
+
+### #️⃣ 포트 확인 후 curl로 접속 확인
+
+- 실행시킨 컨테이너가 잘 실행되고 있는지 확인
+
+<img src="https://github.com/user-attachments/assets/606d27ad-cbf8-4f96-825d-14135d3faf9b" width=600/>
+
+- 실행 중인 컨테이너 포트 확인 후, curl로 접속하여 앱이 잘 실행되는지 확인
+
+<img src="https://github.com/user-attachments/assets/7bfd56c3-969c-431f-96b8-61f3f2ad0854" width=600/>
+
+<img src="https://github.com/user-attachments/assets/dc7f8125-ee18-47df-a05a-564e06f7b1e4" width=600/>
+
+<br>
+
 ## 🖥️ 생성 리소스 확인 
 
 <img src="https://github.com/user-attachments/assets/e68f1cbc-b4e6-4268-8696-c1c2421cf87d" width=700/>
@@ -392,17 +419,4 @@ ubuntu@myserver1:~/08.practice$ docker network inspect 75853b5d03f9
 ```
 
 <br>
-
-### #️⃣ 포트 확인 후 curl로 접속 확인
-
-- 실행시킨 컨테이너가 잘 실행되고 있는지 확인
-
-<img src="https://github.com/user-attachments/assets/606d27ad-cbf8-4f96-825d-14135d3faf9b" width=600/>
-
-- 실행 중인 컨테이너 포트 확인 후, curl로 접속하여 앱이 잘 실행되는지 확인
-
-<img src="https://github.com/user-attachments/assets/7bfd56c3-969c-431f-96b8-61f3f2ad0854" width=600/>
-
-<img src="https://github.com/user-attachments/assets/dc7f8125-ee18-47df-a05a-564e06f7b1e4" width=600/>
-
 
