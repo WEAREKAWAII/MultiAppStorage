@@ -47,7 +47,7 @@
 
 <br>
 
-## ⚙️ 환경 구성
+## ⚙️ 실행 절차 
 
 ### 1️⃣ 백업 파일을 저장할 **호스트 디렉토리** 생성
 
@@ -235,7 +235,7 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 
 <br>
 
-## 🖥️ 전체 실행 확인
+## 🖥️ 생성 리소스 확인 
 
 <img src="https://github.com/user-attachments/assets/e68f1cbc-b4e6-4268-8696-c1c2421cf87d" width=700/>
 
