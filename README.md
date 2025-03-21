@@ -10,5 +10,17 @@
 ## 프로젝트 목적
 
 - Docker-Compose를 통해 다중 컨테이너 실행
-- 다수의 애플리케이션이 하나의 데이터베이스 공유 환경 구성
+- 하나의 자원을 공유해 사용하는 다중 애플리케이션 환경 구성
 - 데이터베이스 장애에 대비한 백업 방안 마련
+
+
+
+
+## sql 백업
+
+
+```
+cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql -uroot -proot
+```
+
+- .sql 파일이 MySQL 컨테이너 내부 mysql 명령으로 전달되어, 원래대로 DB가 복원.
