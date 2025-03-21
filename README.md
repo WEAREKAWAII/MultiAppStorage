@@ -1,4 +1,4 @@
-# MultiAppStorage
+# 🗂️ MultiAppStorage
 
 <br>
 
@@ -22,10 +22,10 @@
 
 ## 🔧 아키텍쳐
 <div align=center>
-  <img src="https://github.com/user-attachments/assets/8e7863fc-6b0f-4a0b-8133-218fcb4e5b23" width=600/>
+  <img src="https://github.com/user-attachments/assets/669e2e38-333b-4612-83c2-3f6026aeb29d" width=700/>
 </div>
 
-### 주요 구성 요소
+### 🧩 주요 구성 요소
 #### 1️⃣ MySQL 컨테이너 (mysqldb)
 - 공통 데이터 저장소 역할
 - 앱 간 데이터 공유 지원
@@ -127,10 +127,12 @@ networks:
 volumes:
   mysql_data:
 ```
-
-⭐ 호스트 디렉토리 **`~/mysql-backups:/backup`   → 컨테이너 내부의 `/backup` 경로로 마운트 된다.**
-
+-  호스트 디렉토리 **`~/mysql-backups:/backup`   → 컨테이너 내부의 `/backup` 경로로 마운트 된다.**
 (컨테이너가 `/backup`에 파일을 쓰면, Ubuntu 내에서도 바로 확인할 수 있다.)
+- DB, App에 **동일한 네트워크** 추가 및 `yaml` 파일에 추가
+  ```
+  docker network create spring-mysql-net
+  ```
 
 <br>
 
@@ -243,26 +245,27 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 
 해당 파일들은 MySQL 컨테이너 내 /backup/ 디렉토리에 저장되었고 주기적인 데이터베이스 백업 자동화가 된 것을 확인할 수 있다.
 
-### Docker volume 목록 확인
+
+### #️⃣ Docker volume 목록 확인
 
 ![image](https://github.com/user-attachments/assets/25b7c0d3-962b-4d02-88a5-0ba37bcf7571)
 
 
-### Docker volume 정보 상세보기
+### #️⃣ Docker volume 정보 상세보기
 
 ```bash
 docker volume inspect [volume_name]
 ```
-
-![image](https://github.com/user-attachments/assets/e41dd800-0d78-4355-98ab-2452d000416a)
+<img src="https://github.com/user-attachments/assets/e41dd800-0d78-4355-98ab-2452d000416a" width=600/>
 
 
 - /var/lib/docker/volumes/08practice_myql_data/_data에 볼륨 마운트 있는 디렉터리 확인
 
-![image](https://github.com/user-attachments/assets/a71b7ea8-e291-4c92-8a84-b27af69165db)
+<img src="https://github.com/user-attachments/assets/a71b7ea8-e291-4c92-8a84-b27af69165db" width=600/>
 
+<br>
 
-## 📌 파일별 의미
+### 🗂️ 파일별 의미
 
 | 파일/폴더 | 설명 |
 | --- | --- |
@@ -277,9 +280,11 @@ docker volume inspect [volume_name]
 | `undo_001`, `undo_002` | **Undo 로그 파일** (트랜잭션 롤백에 사용) |
 | `server-cert.pem`, `server-key.pem`, `ca.pem`, `ca-key.pem`, `client-cert.pem`, `client-key.pem`, `public_key.pem`, `private_key.pem` | MySQL 보안 인증서 및 키 파일 |
 
-## 🔹 **가장 중요한 폴더**
+<br>
 
-### 1. `fisa/`
+### *️⃣ **가장 중요한 폴더**
+
+#### 1. `fisa/`
 
 - `fisa`라는 폴더 안에 실제 테이블 데이터 파일(`.ibd`)이 들어 있음.
 
@@ -287,18 +292,20 @@ docker volume inspect [volume_name]
 ls /var/lib/docker/volumes/08practice_mysql_data/_data/fisa/
 ```
 
-### 2. `binlog.*`
+#### 2. `binlog.*`
 
 - Binary Log (이진 로그) 파일
 - MySQL의 **모든 데이터 변경 사항을 기록**하는 로그
 - DB 복원할 때 유용함
 
-### 3. `ibdata1`
+#### 3. `ibdata1`
 
 - InnoDB 테이블스페이스 파일
 - 모든 트랜잭션과 메타데이터를 저장하는 중요한 파일
 
-## ✅ **이 정보를 통해 알 수 있는 것**
+<br>
+
+### *️⃣ **이 정보를 통해 알 수 있는 것**
 
 1. **MySQL 볼륨(`mysql_data`)이 정상적으로 마운트됨**
     
@@ -313,9 +320,10 @@ ls /var/lib/docker/volumes/08practice_mysql_data/_data/fisa/
     - `binlog.*` → 변경 로그
     - `ibdata1`, `ibtmp1`, `undo_*` → 트랜잭션 정보
 
-### Docker network 확인
+<br>
 
-![image](https://github.com/user-attachments/assets/91486e08-716c-4101-b7e6-abb00bd64dee)
+### #️⃣ Docker network 확인
+<img src="https://github.com/user-attachments/assets/91486e08-716c-4101-b7e6-abb00bd64dee" width=600/>
 
 
 - 명령어를 통해 08practice_spring-mysql-net network 상에 존재하는 컨테이너 목록 확인
@@ -383,11 +391,14 @@ ubuntu@myserver1:~/08.practice$ docker network inspect 75853b5d03f9
 
 ```
 
-### 포트 확인 후 curl로 접속 확인
+<br>
 
-![image](https://github.com/user-attachments/assets/606d27ad-cbf8-4f96-825d-14135d3faf9b)
+### #️⃣ 포트 확인 후 curl로 접속 확인
 
-![image](https://github.com/user-attachments/assets/7bfd56c3-969c-431f-96b8-61f3f2ad0854)
+<img src="https://github.com/user-attachments/assets/606d27ad-cbf8-4f96-825d-14135d3faf9b" width=600/>
 
-![image](https://github.com/user-attachments/assets/dc7f8125-ee18-47df-a05a-564e06f7b1e4)
+<img src="https://github.com/user-attachments/assets/7bfd56c3-969c-431f-96b8-61f3f2ad0854" width=600/>
+
+<img src="https://github.com/user-attachments/assets/dc7f8125-ee18-47df-a05a-564e06f7b1e4" width=600/>
+
 
