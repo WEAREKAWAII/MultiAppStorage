@@ -395,7 +395,11 @@ ubuntu@myserver1:~/08.practice$ docker network inspect 75853b5d03f9
 
 ### #️⃣ 포트 확인 후 curl로 접속 확인
 
+- 실행시킨 컨테이너가 잘 실행되고 있는지 확인
+
 <img src="https://github.com/user-attachments/assets/606d27ad-cbf8-4f96-825d-14135d3faf9b" width=600/>
+
+- 실행 중인 컨테이너 포트 확인 후, curl로 접속하여 앱이 잘 실행되는지 확인
 
 <img src="https://github.com/user-attachments/assets/7bfd56c3-969c-431f-96b8-61f3f2ad0854" width=600/>
 
