@@ -225,11 +225,6 @@ echo "[✔] Backup completed! Check ~/mysql-backups/"
 <br>
 
 
-
-
-
-
-
 ## 💾 sql 백업
 
 
@@ -243,13 +238,13 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 
 ## 실행 확인
 
-### run.sh 파일 실행
+### #️⃣run.sh 파일 실행
 
 - run.sh 파일을 실행하여 docker-compose, Dockerfile 실행
 
 ![image](https://github.com/user-attachments/assets/210a0ca1-f02c-4f68-81f6-a4f350c50fea)
 
-### 컨테이너 생성 및 확인
+### #️⃣컨테이너 생성 및 확인
 
 ![image](https://github.com/user-attachments/assets/5d6b29a9-9dcf-4f19-a8f2-e2354f2399a9)
 
@@ -270,6 +265,8 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 
 ## 🖥️ 생성 리소스 확인 
 
+### DB 백업 확인 
+
 <img src="https://github.com/user-attachments/assets/e68f1cbc-b4e6-4268-8696-c1c2421cf87d" width=700/>
 
 <br>
@@ -277,26 +274,6 @@ cat ~/mysql-backups/fisa_2025-03-21_15-00-00.sql | docker exec -i mysqldb mysql 
 위 스크립트들을 사용하여, 매일  19, 20, 21일 자정에 각 백업이 .sql 파일 형식으로 생성된 것을 확인 가능
 
 해당 파일들은 MySQL 컨테이너 내 /backup/ 디렉토리에 저장되었고 주기적인 데이터베이스 백업 자동화가 된 것을 확인할 수 있다.
-
-
-### #️⃣ Docker volume 목록 확인
-
-![image](https://github.com/user-attachments/assets/25b7c0d3-962b-4d02-88a5-0ba37bcf7571)
-
-
-### #️⃣ Docker volume 정보 상세보기
-
-```bash
-docker volume inspect [volume_name]
-```
-<img src="https://github.com/user-attachments/assets/e41dd800-0d78-4355-98ab-2452d000416a" width=600/>
-
-
-- /var/lib/docker/volumes/08practice_myql_data/_data에 볼륨 마운트 있는 디렉터리 확인
-
-<img src="https://github.com/user-attachments/assets/a71b7ea8-e291-4c92-8a84-b27af69165db" width=600/>
-
-<br>
 
 ### 🗂️ 파일별 의미
 
@@ -352,6 +329,25 @@ ls /var/lib/docker/volumes/08practice_mysql_data/_data/fisa/
     - `fisa/` → 개별 데이터 테이블
     - `binlog.*` → 변경 로그
     - `ibdata1`, `ibtmp1`, `undo_*` → 트랜잭션 정보
+
+<br>
+
+### #️⃣ Docker volume 목록 확인
+
+![image](https://github.com/user-attachments/assets/25b7c0d3-962b-4d02-88a5-0ba37bcf7571)
+
+
+### #️⃣ Docker volume 정보 상세보기
+
+```bash
+docker volume inspect [volume_name]
+```
+<img src="https://github.com/user-attachments/assets/e41dd800-0d78-4355-98ab-2452d000416a" width=600/>
+
+
+- /var/lib/docker/volumes/08practice_myql_data/_data에 볼륨 마운트 있는 디렉터리 확인
+
+<img src="https://github.com/user-attachments/assets/a71b7ea8-e291-4c92-8a84-b27af69165db" width=600/>
 
 <br>
 
